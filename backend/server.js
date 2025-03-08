@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import blogs from "./routes/blogs.js";
 import auth from "./routes/auth.js";
-import connectDB from "./db/conn.js"; // Import the connection function
+import connectDB from "./db/conn.js";
 
 const app = express();
 const PORT = 5050;
