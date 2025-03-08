@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
-const CommentSchema = new mongoose.Schema(
+const CommentSchema = new Schema(
   {
     content: {
       type: String,
@@ -11,7 +12,7 @@ const CommentSchema = new mongoose.Schema(
       type: String,
     },
     blog: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Blog",
     },
   },

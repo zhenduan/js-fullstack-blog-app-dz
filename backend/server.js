@@ -14,8 +14,8 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-// app.use("/blogs", blogs);
-app.use("/auth", auth);
+app.use("/api/blogs", blogs);
+app.use("/api/users", auth);
 
 // Global error handling
 app.use((err, _req, res, next) => {

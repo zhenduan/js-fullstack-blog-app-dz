@@ -1,12 +1,16 @@
 import express from "express";
+import Blog from "../models/Blog.js";
 
 const router = express.Router();
 
-// Get all todos
+// Get all blogs
 router.get("/", async (req, res) => {
-  // let collection = await db.collection("blog");
-  // let results = await collection.find({}).toArray();
-  // res.send(results).status(200);
+  try {
+    const blogs = await Blog.find();
+    res.status(200).json(blogs);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get blogs" });
+  }
 });
 
 export default router;
