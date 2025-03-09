@@ -1,6 +1,7 @@
 import express from "express";
 import Blog from "../models/Blog.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import Comment from "../models/Comment.js";
 
 const router = express.Router();
 
@@ -102,6 +103,26 @@ router.put("/:id", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("Error updating blog:", error);
     res.status(500).json({ error: "Failed to update blog" });
+  }
+});
+
+//crete comment for blog
+router.post("/:id/comments", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+
+    const comment = new Comment({
+      content,
+      blog: id,
+      author: req.userId,
+    });
+
+    await comment.save();
+    res.status(201).json(comment);
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).json({ error: "Failed to create comment" });
   }
 });
 
