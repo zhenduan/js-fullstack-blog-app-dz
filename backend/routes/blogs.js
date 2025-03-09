@@ -55,4 +55,27 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
+//delete a blog
+router.delete("/:id", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      res.status(404).json({ error: "Blog not found" });
+      return;
+    }
+    if (blog.author.toString() !== req.userId) {
+      res
+        .status(403)
+        .json({ error: "You are not authorised to delete this blog" });
+      return;
+    }
+    await Blog.findByIdAndDelete(id);
+    res.status(200).json({ message: "Blog deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting blog:", error);
+    res.status(500).json({ error: "Failed to delete blog" });
+  }
+});
+
 export default router;
