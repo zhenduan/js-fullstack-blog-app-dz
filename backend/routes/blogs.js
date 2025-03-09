@@ -45,7 +45,7 @@ router.post("/", authMiddleware, async (req, res) => {
       title,
       content,
       featuredImageUrl: featuredImageUrl || "",
-      author: req.userId,
+      author: req.user.userId,
     });
 
     const savedBlog = await newBlog.save();
@@ -65,7 +65,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
       res.status(404).json({ error: "Blog not found" });
       return;
     }
-    if (blog.author.toString() !== req.userId) {
+    if (blog.author.toString() !== req.user.userId) {
       res
         .status(403)
         .json({ error: "You are not authorised to delete this blog" });
@@ -89,7 +89,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
       res.status(404).json({ error: "Blog not found" });
       return;
     }
-    if (blog.author.toString() !== req.userId) {
+    if (blog.author.toString() !== req.user.userId) {
       res
         .status(403)
         .json({ error: "You are not authorised to update this blog" });
@@ -115,7 +115,7 @@ router.post("/:id/comments", authMiddleware, async (req, res) => {
     const comment = new Comment({
       content,
       blog: id,
-      author: req.userId,
+      author: req.user.username,
     });
 
     await comment.save();
@@ -123,6 +123,18 @@ router.post("/:id/comments", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("Error creating comment:", error);
     res.status(500).json({ error: "Failed to create comment" });
+  }
+});
+
+//get comments for blog
+router.get("/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const comments = await Comment.find({ blog: id }).populate("author");
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error("Error getting comments:", error);
+    res.status(500).json({ error: "Failed to get comments" });
   }
 });
 
