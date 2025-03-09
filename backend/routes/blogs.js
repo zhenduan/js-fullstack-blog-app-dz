@@ -78,4 +78,31 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
+//update blog
+router.put("/:id", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, featuredImageUrl } = req.body;
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      res.status(404).json({ error: "Blog not found" });
+      return;
+    }
+    if (blog.author.toString() !== req.userId) {
+      res
+        .status(403)
+        .json({ error: "You are not authorised to update this blog" });
+      return;
+    }
+    if (title) blog.title = title;
+    if (content) blog.content = content;
+    if (featuredImageUrl) blog.featuredImageUrl = featuredImageUrl;
+    const updatedBlog = await blog.save();
+    res.status(200).json(updatedBlog);
+  } catch (error) {
+    console.error("Error updating blog:", error);
+    res.status(500).json({ error: "Failed to update blog" });
+  }
+});
+
 export default router;
