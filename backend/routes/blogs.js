@@ -162,4 +162,29 @@ router.delete("/comments/:id", authMiddleware, async (req, res) => {
   }
 });
 
+//update comment
+router.put("/comments/:id", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+    const comment = await Comment.findById(id);
+    if (!comment) {
+      res.status(404).json({ error: "Comment not found" });
+      return;
+    }
+    if (comment.author.id !== req.user.userId) {
+      res
+        .status(403)
+        .json({ error: "You are not authorised to update this comment" });
+      return;
+    }
+    if (content) comment.content = content;
+    const updatedComment = await comment.save();
+    res.status(200).json(updatedComment);
+  } catch (error) {
+    console.error("Error updating comment:", error);
+    res.status(500).json({ error: "Failed to update comment" });
+  }
+});
+
 export default router;
