@@ -8,8 +8,33 @@ const router = express.Router();
 // Get all blogs
 router.get("/", async (req, res) => {
   try {
-    const blogs = await Blog.find();
-    res.status(200).json(blogs);
+    const { page = 1, limit = 2, search = "", sort = "-createdAt" } = req.query;
+
+    const query = {};
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const skip = (page - 1) * limit;
+
+    const blogs = await Blog.find(query)
+      .sort(sort)
+      .skip(skip)
+      .limit(parseInt(limit))
+      .populate("author");
+    // const blogs = await Blog.find();
+
+    const totalBlogs = await Blog.countDocuments(query);
+    res.status(200).json({
+      blogs,
+      totalBlogs,
+      totalPages: Math.ceil(totalBlogs / limit),
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
   } catch (error) {
     console.error("Error getting blogs:", error);
     res.status(500).json({ error: "Failed to get blogs" });
