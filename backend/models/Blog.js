@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Comment from "./Comment.js";
 const { Schema } = mongoose;
 
 const BlogSchema = new Schema(
@@ -24,5 +25,18 @@ const BlogSchema = new Schema(
   },
   { timestamps: true }
 );
+
+BlogSchema.pre("deleteOne", async function (next) {
+  const blogId = this.getQuery()._id; // `this` refers to the query object, not the document
+
+  try {
+    // Delete all comments with the matching blogId
+    await Comment.deleteMany({ blog: blogId });
+    next();
+  } catch (error) {
+    console.error("Error deleting comments:", error);
+    next(error);
+  }
+});
 
 export default mongoose.model("Blog", BlogSchema);

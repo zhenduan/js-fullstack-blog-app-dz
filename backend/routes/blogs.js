@@ -71,7 +71,8 @@ router.delete("/:id", authMiddleware, async (req, res) => {
         .json({ error: "You are not authorised to delete this blog" });
       return;
     }
-    await Blog.findByIdAndDelete(id);
+
+    await Blog.deleteOne({ _id: id });
     res.status(200).json({ message: "Blog deleted successfully" });
   } catch (error) {
     console.error("Error deleting blog:", error);
