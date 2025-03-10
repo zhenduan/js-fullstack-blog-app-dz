@@ -10,7 +10,7 @@ const CommentSchema = new Schema(
 
     author: {
       // Define author as an object with nested properties
-      name: {
+      username: {
         type: String,
         required: true,
       },

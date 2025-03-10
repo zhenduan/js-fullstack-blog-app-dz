@@ -140,7 +140,7 @@ router.post("/:id/comments", authMiddleware, async (req, res) => {
     const comment = new Comment({
       content,
       blog: id,
-      author: { name: req.user.username, id: req.user.userId },
+      author: { username: req.user.username, id: req.user.userId },
     });
 
     await comment.save();
