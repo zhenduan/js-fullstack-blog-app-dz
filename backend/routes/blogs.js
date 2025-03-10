@@ -24,8 +24,7 @@ router.get("/", async (req, res) => {
       .sort(sort)
       .skip(skip)
       .limit(parseInt(limit))
-      .populate("author");
-    // const blogs = await Blog.find();
+      .populate("author", "username");
 
     const totalBlogs = await Blog.countDocuments(query);
     res.status(200).json({
