@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import Comment from "./Comment.js";
-import mongoosePaginate from "mongoose-paginate-v2";
 const { Schema } = mongoose;
 
 const BlogSchema = new Schema(
@@ -39,7 +38,5 @@ BlogSchema.pre("deleteOne", async function (next) {
     next(error);
   }
 });
-
-BlogSchema.plugin(mongoosePaginate);
 
 export default mongoose.model("Blog", BlogSchema);
