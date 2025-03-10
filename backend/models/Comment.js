@@ -9,7 +9,15 @@ const CommentSchema = new Schema(
     },
 
     author: {
-      type: String,
+      // Define author as an object with nested properties
+      name: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: String,
+        required: true,
+      },
     },
     blog: {
       type: Schema.Types.ObjectId,
