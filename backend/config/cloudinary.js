@@ -24,4 +24,4 @@ const storage = new CloudinaryStorage({
 // Initialize Multer with the storage engine
 const upload = multer({ storage: storage });
 
-export default upload; // Export the upload middleware as the default export
+export { upload, cloudinary };

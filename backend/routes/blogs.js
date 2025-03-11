@@ -2,7 +2,7 @@ import express from "express";
 import Blog from "../models/Blog.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import Comment from "../models/Comment.js";
-import upload from "../config/cloudinary.js";
+import { upload, cloudinary } from "../config/cloudinary.js";
 
 const router = express.Router();
 
@@ -116,31 +116,46 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 //update blog
-router.put("/:id", authMiddleware, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { title, content, featuredImageUrl } = req.body;
-    const blog = await Blog.findById(id);
-    if (!blog) {
-      res.status(404).json({ error: "Blog not found" });
-      return;
+router.put(
+  "/:id",
+  authMiddleware,
+  upload.single("featuredImage"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, content, featuredImageUrl } = req.body;
+      const blog = await Blog.findById(id);
+      if (!blog) {
+        res.status(404).json({ error: "Blog not found" });
+        return;
+      }
+      if (blog.author.toString() !== req.user.userId) {
+        res
+          .status(403)
+          .json({ error: "You are not authorised to update this blog" });
+        return;
+      }
+      if (title) blog.title = title;
+      if (content) blog.content = content;
+      // If a new file is uploaded, update the featuredImageUrl
+      if (req.file) {
+        // Delete the old image from Cloudinary
+        if (blog.featuredImageUrl) {
+          const publicId = blog.featuredImageUrl.split("/").pop().split(".")[0];
+          await cloudinary.uploader.destroy(`blog_covers/${publicId}`);
+        }
+
+        // Set the new featuredImageUrl
+        blog.featuredImageUrl = req.file.path;
+      }
+      const updatedBlog = await blog.save();
+      res.status(200).json(updatedBlog);
+    } catch (error) {
+      console.error("Error updating blog:", error);
+      res.status(500).json({ error: "Failed to update blog" });
     }
-    if (blog.author.toString() !== req.user.userId) {
-      res
-        .status(403)
-        .json({ error: "You are not authorised to update this blog" });
-      return;
-    }
-    if (title) blog.title = title;
-    if (content) blog.content = content;
-    if (featuredImageUrl) blog.featuredImageUrl = featuredImageUrl;
-    const updatedBlog = await blog.save();
-    res.status(200).json(updatedBlog);
-  } catch (error) {
-    console.error("Error updating blog:", error);
-    res.status(500).json({ error: "Failed to update blog" });
   }
-});
+);
 
 //crete comment for blog
 router.post("/:id/comments", authMiddleware, async (req, res) => {
