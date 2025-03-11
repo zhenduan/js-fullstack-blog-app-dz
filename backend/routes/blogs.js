@@ -2,6 +2,7 @@ import express from "express";
 import Blog from "../models/Blog.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import Comment from "../models/Comment.js";
+import upload from "../config/cloudinary.js";
 
 const router = express.Router();
 
@@ -57,28 +58,38 @@ router.get("/:id", async (req, res) => {
 });
 
 // post a blog
-router.post("/", authMiddleware, async (req, res) => {
-  try {
-    const { title, content, featuredImageUrl } = req.body;
+router.post(
+  "/",
+  authMiddleware,
+  upload.single("featuredImage"),
+  async (req, res) => {
+    try {
+      const { title, content } = req.body;
 
-    if (!title || !content) {
-      return res.status(400).json({ error: "Title and content are required" });
+      if (!title || !content) {
+        return res
+          .status(400)
+          .json({ error: "Title and content are required" });
+      }
+
+      // Get the Cloudinary URL if a file was uploaded
+      const featuredImageUrl = req.file ? req.file.path : "";
+
+      const newBlog = new Blog({
+        title,
+        content,
+        featuredImageUrl: featuredImageUrl,
+        author: req.user.userId,
+      });
+
+      const savedBlog = await newBlog.save();
+      res.status(201).json(savedBlog);
+    } catch (error) {
+      console.error("Error creating blog post:", error);
+      res.status(500).json({ error: "Failed to create blog post" });
     }
-
-    const newBlog = new Blog({
-      title,
-      content,
-      featuredImageUrl: featuredImageUrl || "",
-      author: req.user.userId,
-    });
-
-    const savedBlog = await newBlog.save();
-    res.status(201).json(savedBlog);
-  } catch (error) {
-    console.error("Error creating blog post:", error);
-    res.status(500).json({ error: "Failed to create blog post" });
   }
-});
+);
 
 //delete a blog
 router.delete("/:id", authMiddleware, async (req, res) => {
