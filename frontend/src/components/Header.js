@@ -1,8 +1,11 @@
 // components/Header.js
 import React from "react";
 import { Link } from "react-router-dom";
+import useAuthStore from "../stores/authStore";
 
 const Header = () => {
+  const { isAuthenticated, logout } = useAuthStore();
+  console.log("isAuthenticated", isAuthenticated);
   return (
     <header className="bg-gray-800 text-white p-4 shadow-md">
       <nav className="container mx-auto flex justify-between items-center">
@@ -23,19 +26,27 @@ const Header = () => {
             Profile
           </Link>
         </div>
-        <div className="flex space-x-4">
-          <Link
-            to="/login"
-            className="hover:text-gray-300 transition duration-200"
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className="hover:text-gray-300 transition duration-200"
-          >
-            Register
-          </Link>
+
+        <div>
+          {isAuthenticated ? (
+            <button onClick={logout}>Logout</button>
+          ) : (
+            <div className="flex space-x-4">
+              {" "}
+              <Link
+                to="/login"
+                className="hover:text-gray-300 transition duration-200"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="hover:text-gray-300 transition duration-200"
+              >
+                Register
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
     </header>
