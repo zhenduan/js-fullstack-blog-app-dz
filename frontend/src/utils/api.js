@@ -24,7 +24,6 @@ api.interceptors.response.use(
       // Backend responded with an error status (4xx, 5xx)
       const { status, data } = error.response;
       console.error("Backend Error:", status, data.error || data);
-      console.log("data111", data);
 
       // Display a global error message (e.g., using a toast notification)
       toast.error(data.error || "An error occurred. Please try again.");
