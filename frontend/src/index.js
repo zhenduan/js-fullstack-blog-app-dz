@@ -18,6 +18,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "./stores/authStore";
+import Layout from "./components/Layout";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -27,31 +28,33 @@ root.render(
   <React.StrictMode>
     <ToastContainer />
     <Router>
-      <Routes>
-        <Route exact path="/" element={<HomePage />} />
-        <Route exact path="/blogs/:id" element={<BlogDetailPage />} />
-        <Route
-          exact
-          path="/blog/create"
-          element={
-            <PrivateRoute>
-              <CreateBlogPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          exact
-          path="/blog/edit/:edit"
-          element={
-            <PrivateRoute>
-              <EditBlogPage />
-            </PrivateRoute>
-          }
-        />
-        <Route exact path="/login" element={<LoginPage />} />
-        <Route exact path="/register" element={<RegisterPage />} />
-        <Route exact path="/profile" element={<ProfilePage />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route exact path="/" element={<HomePage />} />
+          <Route exact path="/blogs/:id" element={<BlogDetailPage />} />
+          <Route
+            exact
+            path="/blog/create"
+            element={
+              <PrivateRoute>
+                <CreateBlogPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path="/blog/edit/:edit"
+            element={
+              <PrivateRoute>
+                <EditBlogPage />
+              </PrivateRoute>
+            }
+          />
+          <Route exact path="/login" element={<LoginPage />} />
+          <Route exact path="/register" element={<RegisterPage />} />
+          <Route exact path="/profile" element={<ProfilePage />} />
+        </Routes>
+      </Layout>
     </Router>
   </React.StrictMode>
 );
