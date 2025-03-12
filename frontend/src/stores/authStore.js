@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import axios from "axios";
 import api from "../utils/api";
 
 const useAuthStore = create((set) => ({
@@ -7,21 +6,20 @@ const useAuthStore = create((set) => ({
   token: localStorage.getItem("js-fullstack-blog-app-token") || null,
   isAuthenticated: !!localStorage.getItem("js-fullstack-blog-app-token"),
 
-  register: async (userData) => {
+  register: async (userData, navigate) => {
     try {
       const response = await api.post("/users/register", userData);
-      localStorage.setItem("token", response.data.token);
-      set({
-        user: response.data.user,
-        token: response.data.token,
-        isAuthenticated: true,
-      });
+      console.log("register response", response);
+      if (response.status === 201) {
+        //redirect to login page
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Registration failed:", error);
     }
   },
 
-  login: async (credentials) => {
+  login: async (credentials, navigate) => {
     try {
       const response = await api.post("/users/login", credentials);
 
@@ -35,6 +33,7 @@ const useAuthStore = create((set) => ({
           token: response.data.token,
           isAuthenticated: true,
         });
+        navigate("/");
       }
     } catch (error) {
       console.error("Login failed:", error);

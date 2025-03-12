@@ -9,10 +9,9 @@ const LoginPage = () => {
 
   const login = useAuthStore((state) => state.login);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login({ email, password });
-    navigate("/");
+    login({ email, password }, navigate);
   };
 
   return (
