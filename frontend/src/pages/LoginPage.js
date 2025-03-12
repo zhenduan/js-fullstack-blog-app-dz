@@ -1,18 +1,27 @@
 import React, { useState } from "react";
 import useAuthStore from "../stores/authStore";
+import useLoadingStore from "../stores/loadingStore";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const login = useAuthStore((state) => state.login);
+  const { isLoading, startLoading, stopLoading } = useLoadingStore();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    login({ email, password }, navigate);
+    try {
+      startLoading(); // Start loading
+      await login({ email, password }, navigate);
+    } catch (error) {
+      console.error("Login failed:", error);
+    } finally {
+      stopLoading();
+    }
   };
 
   return (
@@ -55,10 +64,11 @@ const LoginPage = () => {
           </div>
 
           <button
+            disabled={isLoading}
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            Login
+            {isLoading ? "Processing..." : "Login"}
           </button>
         </form>
 
