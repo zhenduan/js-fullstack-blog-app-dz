@@ -43,7 +43,7 @@ root.render(
           />
           <Route
             exact
-            path="/blog/edit/:edit"
+            path="/blog/edit/:id"
             element={
               <PrivateRoute>
                 <EditBlogPage />

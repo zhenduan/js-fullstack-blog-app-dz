@@ -4,6 +4,7 @@ import useBlogStore from "../stores/blogStore";
 import useLoadingStore from "../stores/loadingStore";
 import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const BlogDetailPage = () => {
   const {
@@ -75,12 +76,20 @@ const BlogDetailPage = () => {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold">{blog.title}</h1>
         {user?.userId && blog.author._id === user.userId && (
-          <button
-            onClick={handleDelete}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400"
-          >
-            Delete
-          </button>
+          <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+            <Link
+              to={`/blog/edit/${id}`}
+              className="text-center bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              Edit
+            </Link>
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+              Delete
+            </button>
+          </div>
         )}
       </div>
       {/* Author and Creation Date */}

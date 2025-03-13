@@ -42,6 +42,7 @@ const useBlogStore = create((set) => ({
         set({
           blog: response.data,
         });
+        return response.data;
       }
     } catch (error) {}
   },
@@ -75,6 +76,22 @@ const useBlogStore = create((set) => ({
       console.error("Failed to delete blog", error);
     }
   },
+  updateBlog: async (id, blogData, navigate) => {
+    try {
+      const response = await api.put(`/blogs/${id}`, blogData, {
+        headers: {
+          Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200) {
+        toast.success("Blog updated successfully!");
+        navigate(`/blogs/${id}`);
+      }
+    } catch (error) {
+      console.error("Failed to update blog", error);
+    }
+  },
   fetchComments: async (id) => {
     try {
       const response = await api.get(`/blogs/${id}/comments`);
@@ -90,7 +107,6 @@ const useBlogStore = create((set) => ({
           Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
         },
       });
-      console.log("response", response);
       if (response.status === 201) {
         toast.success("Create comment successfully");
       }
