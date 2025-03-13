@@ -10,6 +10,7 @@ const useBlogStore = create((set) => ({
   limit: process.env.REACT_APP_DEFAULT_FETCH_BLOGS_LIMIT, // Blogs per page
   searchQuery: "",
   blog: null,
+  comments: [],
 
   fetchBlogs: async (
     page = 1,
@@ -70,8 +71,36 @@ const useBlogStore = create((set) => ({
         toast.info("Blog deleted successfully");
         navigate("/");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Failed to delete blog", error);
+    }
   },
+  fetchComments: async (id) => {
+    try {
+      const response = await api.get(`/blogs/${id}/comments`);
+      console.log("response111", response);
+      set({ comments: response.data });
+    } catch (error) {
+      console.error("Failed to fetch blog comments", error);
+    }
+  },
+  addComment: async (id, content) => {
+    try {
+      const response = await api.post(`/blogs/${id}/comments`, content, {
+        headers: {
+          Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
+        },
+      });
+      console.log("response", response);
+      if (response.status === 201) {
+        toast.success("Create comment successfully");
+      }
+    } catch (error) {
+      console.error("Failed to create comment", error);
+    }
+  },
+  update: async () => {},
+  deleteComment: async () => {},
   setSearchQuery: (query) => set({ searchQuery: query }),
 }));
 

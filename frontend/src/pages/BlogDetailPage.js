@@ -6,8 +6,17 @@ import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
 
 const BlogDetailPage = () => {
-  const { fetchBlogById, blog, deleteBlog } = useBlogStore();
+  const {
+    fetchBlogById,
+    blog,
+    deleteBlog,
+    fetchComments,
+    comments,
+    addComment,
+    deleteComment,
+  } = useBlogStore();
   const { isLoading, startLoading, stopLoading } = useLoadingStore();
+  const [newComment, setNewComment] = useState(""); // State for the new comment
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
@@ -18,7 +27,6 @@ const BlogDetailPage = () => {
       try {
         startLoading();
         await fetchBlogById(id);
-        console.log("fetch blog");
       } catch (error) {
         console.error("Failed to fetch blog:", error);
       } finally {
@@ -26,6 +34,7 @@ const BlogDetailPage = () => {
       }
     };
     fetchBlog(id);
+    fetchComments(id);
   }, [id]);
 
   const handleDelete = async () => {
@@ -34,6 +43,16 @@ const BlogDetailPage = () => {
     } catch (error) {
       console.error("Failed delete blog", error);
     }
+  };
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    await addComment(id, { content: newComment });
+    setNewComment("");
+    fetchComments(id);
+  };
+
+  const handleCommentDelete = async (e) => {
+    e.preventDefault();
   };
 
   if (isLoading) {
@@ -48,7 +67,6 @@ const BlogDetailPage = () => {
     return <div className="text-center text-gray-600">Blog not found.</div>;
   }
 
-  console.log("user", user);
   return (
     <div className="container mx-auto p-4">
       {/* Title and Delete Button */}
@@ -87,6 +105,58 @@ const BlogDetailPage = () => {
           className="text-gray-700"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
+      </div>
+      {/* Comments Section */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Comments</h2>
+
+        {/* Add Comment Field */}
+        {user && (
+          <form onSubmit={handleCommentSubmit} className="mb-6">
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write a comment..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              rows={3}
+              required
+            />
+            <button
+              type="submit"
+              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Add Comment
+            </button>
+          </form>
+        )}
+
+        {/* Comments List */}
+        <div className="space-y-4">
+          {comments.map((comment) => (
+            <div
+              key={comment._id}
+              className="bg-white p-4 rounded-lg shadow-md"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <span className="font-medium">{comment.author.username}</span>
+                  <span className="text-sm text-gray-600 ml-2">
+                    {new Date(comment.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                {user?.userId === comment.author._id && (
+                  <button
+                    onClick={() => handleCommentDelete(comment._id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
+              <p className="mt-2 text-gray-700">{comment.content}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
