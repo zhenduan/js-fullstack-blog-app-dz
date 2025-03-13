@@ -51,8 +51,10 @@ const BlogDetailPage = () => {
     fetchComments(id);
   };
 
-  const handleCommentDelete = async (e) => {
+  const handleCommentDelete = async (e, commentId) => {
     e.preventDefault();
+    await deleteComment(commentId);
+    fetchComments(id);
   };
 
   if (isLoading) {
@@ -144,9 +146,9 @@ const BlogDetailPage = () => {
                     {new Date(comment.createdAt).toLocaleDateString()}
                   </span>
                 </div>
-                {user?.userId === comment.author._id && (
+                {user?.userId === comment.author.id && (
                   <button
-                    onClick={() => handleCommentDelete(comment._id)}
+                    onClick={(e) => handleCommentDelete(e, comment._id)}
                     className="text-red-600 hover:text-red-700"
                   >
                     Delete

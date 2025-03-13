@@ -78,7 +78,6 @@ const useBlogStore = create((set) => ({
   fetchComments: async (id) => {
     try {
       const response = await api.get(`/blogs/${id}/comments`);
-      console.log("response111", response);
       set({ comments: response.data });
     } catch (error) {
       console.error("Failed to fetch blog comments", error);
@@ -100,7 +99,16 @@ const useBlogStore = create((set) => ({
     }
   },
   update: async () => {},
-  deleteComment: async () => {},
+  deleteComment: async (commentId) => {
+    try {
+      const response = await api.delete(`/blogs/comments/${commentId}`);
+      if (response.status === 200) {
+        toast.info("Comment deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete comment", error);
+    }
+  },
   setSearchQuery: (query) => set({ searchQuery: query }),
 }));
 
