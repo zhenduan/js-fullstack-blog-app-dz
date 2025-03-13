@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const api = axios.create({
-  baseURL: "http://localhost:5050/api", // Your backend API base URL
+  baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`, // Your backend API base URL
 });
 
 // Request interceptor to add the JWT token to headers
