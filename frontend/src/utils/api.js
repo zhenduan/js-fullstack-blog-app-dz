@@ -29,7 +29,7 @@ api.interceptors.response.use(
       toast.error(data.error || "An error occurred. Please try again.");
 
       // Handle specific error statuses
-      if (status === 401) {
+      if (status === 401 || status === 498) {
         // Unauthorized: Redirect to login or refresh token
         localStorage.removeItem("js-fullstack-blog-app-token");
         localStorage.removeItem("js-fullstack-blog-app-user");
