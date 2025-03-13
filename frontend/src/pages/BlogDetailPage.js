@@ -39,10 +39,14 @@ const BlogDetailPage = () => {
     <div className="container mx-auto p-4">
       {/* Blog Title */}
       <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
-      {/* Creation Date */}
+      {/* Author and Creation Date */}
       <div className="mb-6 text-sm text-gray-600">
         <span>
-          Published on {new Date(blog.createdAt).toLocaleDateString()}
+          By{" "}
+          <span className="font-medium">
+            {blog.author.username || "Unknown Author"}
+          </span>{" "}
+          • Published on {new Date(blog.createdAt).toLocaleDateString()}
         </span>
       </div>
 

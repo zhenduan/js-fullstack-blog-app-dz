@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findById(id).populate("author", "username");
     if (!blog) {
       res.status(404).json({ error: "Blog not found" });
       return;
