@@ -6,7 +6,6 @@ import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { toast } from "react-toastify";
 
 const EditBlogPage = () => {
   const { id } = useParams();
@@ -16,6 +15,7 @@ const EditBlogPage = () => {
 
   const { fetchBlogById, blog, updateBlog } = useBlogStore();
   const { isLoading, startLoading, stopLoading } = useLoadingStore();
+  const [isUpdatingBlog, setIsUpdatingBlog] = useState(false);
 
   const { user } = useAuthStore();
 
@@ -41,9 +41,12 @@ const EditBlogPage = () => {
     e.preventDefault();
 
     try {
+      setIsUpdatingBlog(true);
       await updateBlog(id, { title, content, featuredImage }, navigate);
+      setIsUpdatingBlog(false);
     } catch (error) {
       console.error("Failed to edit blog");
+      setIsUpdatingBlog(false);
     }
   };
 
@@ -124,11 +127,11 @@ const EditBlogPage = () => {
         {/* Submit Button */}
         <div>
           <button
-            disabled={isLoading}
+            disabled={isUpdatingBlog}
             type="submit"
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            {isLoading ? "Updating..." : "Edit Blog"}
+            {isUpdatingBlog ? "Updating..." : "Edit Blog"}
           </button>
         </div>
       </form>
