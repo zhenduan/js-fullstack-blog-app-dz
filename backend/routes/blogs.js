@@ -123,7 +123,7 @@ router.put(
   async (req, res) => {
     try {
       const { id } = req.params;
-      const { title, content, featuredImageUrl } = req.body;
+      const { title, content } = req.body;
       const blog = await Blog.findById(id);
       if (!blog) {
         res.status(404).json({ error: "Blog not found" });

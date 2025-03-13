@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import api from "../utils/api";
+import { toast } from "react-toastify";
 
 const useBlogStore = create((set) => ({
   blogs: [],
@@ -42,6 +43,23 @@ const useBlogStore = create((set) => ({
         });
       }
     } catch (error) {}
+  },
+  createBlog: async (blogData, navigate) => {
+    try {
+      const response = await api.post("/blogs", blogData, {
+        headers: {
+          Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 201) {
+        toast.success("Blog created successfully");
+        navigate("/");
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Failed to create blog:", error);
+    }
   },
   setSearchQuery: (query) => set({ searchQuery: query }),
 }));

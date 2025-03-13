@@ -11,7 +11,6 @@ const useAuthStore = create((set) => ({
       const response = await api.post("/users/register", userData);
       console.log("register response", response);
       if (response.status === 201) {
-        //redirect to login page
         navigate("/login");
       }
     } catch (error) {
