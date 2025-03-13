@@ -5,6 +5,7 @@ import useLoadingStore from "../stores/loadingStore";
 import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import CommentCard from "../components/CommentCard";
 
 const BlogDetailPage = () => {
   const {
@@ -14,7 +15,6 @@ const BlogDetailPage = () => {
     fetchComments,
     comments,
     addComment,
-    deleteComment,
   } = useBlogStore();
   const { isLoading, startLoading, stopLoading } = useLoadingStore();
   const [newComment, setNewComment] = useState(""); // State for the new comment
@@ -49,12 +49,6 @@ const BlogDetailPage = () => {
     e.preventDefault();
     await addComment(id, { content: newComment });
     setNewComment("");
-    fetchComments(id);
-  };
-
-  const handleCommentDelete = async (e, commentId) => {
-    e.preventDefault();
-    await deleteComment(commentId);
     fetchComments(id);
   };
 
@@ -144,27 +138,8 @@ const BlogDetailPage = () => {
         {/* Comments List */}
         <div className="space-y-4">
           {comments.map((comment) => (
-            <div
-              key={comment._id}
-              className="bg-white p-4 rounded-lg shadow-md"
-            >
-              <div className="flex justify-between items-center">
-                <div>
-                  <span className="font-medium">{comment.author.username}</span>
-                  <span className="text-sm text-gray-600 ml-2">
-                    {new Date(comment.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-                {user?.userId === comment.author.id && (
-                  <button
-                    onClick={(e) => handleCommentDelete(e, comment._id)}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    Delete
-                  </button>
-                )}
-              </div>
-              <p className="mt-2 text-gray-700">{comment.content}</p>
+            <div key={comment._id}>
+              <CommentCard comment={comment} blogId={id} />
             </div>
           ))}
         </div>

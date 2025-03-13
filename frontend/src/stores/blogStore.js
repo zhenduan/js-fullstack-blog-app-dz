@@ -114,7 +114,20 @@ const useBlogStore = create((set) => ({
       console.error("Failed to create comment", error);
     }
   },
-  update: async () => {},
+  updateComment: async (id, content) => {
+    try {
+      const response = await api.put(`/blogs/comments/${id}`, content, {
+        headers: {
+          Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
+        },
+      });
+      if (response.status === 200) {
+        toast.success("Edit comment successfully");
+      }
+    } catch (error) {
+      console.error("Failed to edit comment", error);
+    }
+  },
   deleteComment: async (commentId) => {
     try {
       const response = await api.delete(`/blogs/comments/${commentId}`);
