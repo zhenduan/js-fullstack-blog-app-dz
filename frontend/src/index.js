@@ -25,7 +25,7 @@ const PrivateRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 root.render(
-  <React.StrictMode>
+  <>
     <ToastContainer />
     <Router>
       <Layout>
@@ -56,7 +56,7 @@ root.render(
         </Routes>
       </Layout>
     </Router>
-  </React.StrictMode>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function

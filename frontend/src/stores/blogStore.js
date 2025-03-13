@@ -8,6 +8,7 @@ const useBlogStore = create((set) => ({
   page: 1, // Current page
   limit: process.env.REACT_APP_DEFAULT_FETCH_BLOGS_LIMIT, // Blogs per page
   searchQuery: "",
+  blog: null,
 
   fetchBlogs: async (
     page = 1,
@@ -18,17 +19,29 @@ const useBlogStore = create((set) => ({
       const response = await api.get(
         `/blogs?page=${page}&limit=${limit}&search=${searchQuery}`
       );
-      set({
-        blogs: response.data.blogs,
-        totalBlogs: response.data.totalBlogs,
-        totalPages: response.data.totalPages,
-        page: response.data.page,
-        limit: response.data.limit,
-        searchQuery,
-      });
+      if (response.status === 200) {
+        set({
+          blogs: response.data.blogs,
+          totalBlogs: response.data.totalBlogs,
+          totalPages: response.data.totalPages,
+          page: response.data.page,
+          limit: response.data.limit,
+          searchQuery,
+        });
+      }
     } catch (error) {
       console.error("Failed to fetch blogs:", error);
     }
+  },
+  fetchBlogById: async (id) => {
+    try {
+      const response = await api.get(`/blogs/${id}`);
+      if (response.status === 200) {
+        set({
+          blog: response.data,
+        });
+      }
+    } catch (error) {}
   },
   setSearchQuery: (query) => set({ searchQuery: query }),
 }));
