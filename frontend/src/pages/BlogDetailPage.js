@@ -59,7 +59,10 @@ const BlogDetailPage = () => {
 
       {/* Blog Content */}
       <div className="prose max-w-none">
-        <p className="text-gray-700">{blog.content}</p>
+        <div
+          className="text-gray-700"
+          dangerouslySetInnerHTML={{ __html: blog.content }}
+        />
       </div>
     </div>
   );

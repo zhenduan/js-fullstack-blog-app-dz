@@ -11,9 +11,11 @@ const BlogCard = ({ blog }) => {
       />
       <div className="p-4">
         <h2 className="text-xl font-bold mb-2">{blog.title}</h2>
-        <p className="text-gray-700 mb-4">
-          {blog.content.substring(0, 100)}...
-        </p>
+
+        <p
+          className="text-gray-700 mb-4"
+          dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) }}
+        />
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">
             By {blog.author.username}
