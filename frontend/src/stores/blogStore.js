@@ -61,6 +61,17 @@ const useBlogStore = create((set) => ({
       console.error("Failed to create blog:", error);
     }
   },
+  deleteBlog: async (id, navigate) => {
+    try {
+      const response = await api.delete(`/blogs/${id}`, {
+        Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
+      });
+      if (response.status === 200) {
+        toast.info("Blog deleted successfully");
+        navigate("/");
+      }
+    } catch (error) {}
+  },
   setSearchQuery: (query) => set({ searchQuery: query }),
 }));
 

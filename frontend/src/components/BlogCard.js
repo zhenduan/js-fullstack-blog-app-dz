@@ -5,7 +5,7 @@ const BlogCard = ({ blog }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <img
-        src={blog.featuredImageUrl || "./blogPlaceholder.png"}
+        src={blog.featuredImageUrl || "/blogPlaceholder.png"}
         alt={blog.title}
         className="w-full h-48 object-cover"
       />

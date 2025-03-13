@@ -48,6 +48,10 @@ const HomePage = () => {
     fetchBlogs(page, defaultFetchBlogsLimit, "");
   };
 
+  if (!isLoading && blogs.length === 0) {
+    return <p>No blogs</p>;
+  }
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Blogs</h1>
@@ -87,7 +91,6 @@ const HomePage = () => {
               <BlogCard key={blog._id} blog={blog} />
             ))}
           </div>
-
           <Pagination
             currentPage={page}
             totalPages={totalPages}

@@ -2,10 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useBlogStore from "../stores/blogStore";
 import useLoadingStore from "../stores/loadingStore";
+import useAuthStore from "../stores/authStore";
+import { useNavigate } from "react-router-dom";
 
 const BlogDetailPage = () => {
-  const { fetchBlogById, blog } = useBlogStore();
+  const { fetchBlogById, blog, deleteBlog } = useBlogStore();
   const { isLoading, startLoading, stopLoading } = useLoadingStore();
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -24,6 +28,14 @@ const BlogDetailPage = () => {
     fetchBlog(id);
   }, [id]);
 
+  const handleDelete = async () => {
+    try {
+      await deleteBlog(id, navigate);
+    } catch (error) {
+      console.error("Failed delete blog", error);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -35,10 +47,22 @@ const BlogDetailPage = () => {
   if (!blog) {
     return <div className="text-center text-gray-600">Blog not found.</div>;
   }
+
+  console.log("user", user);
   return (
     <div className="container mx-auto p-4">
-      {/* Blog Title */}
-      <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
+      {/* Title and Delete Button */}
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">{blog.title}</h1>
+        {user?.userId && blog.author._id === user.userId && (
+          <button
+            onClick={handleDelete}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400"
+          >
+            Delete
+          </button>
+        )}
+      </div>
       {/* Author and Creation Date */}
       <div className="mb-6 text-sm text-gray-600">
         <span>
@@ -52,7 +76,7 @@ const BlogDetailPage = () => {
 
       {/* Featured Image */}
       <img
-        src={blog.featuredImageUrl || "https://via.placeholder.com/800x400"}
+        src={blog.featuredImageUrl || "/blogPlaceholder.png"}
         alt={blog.title}
         className="w-full h-64 object-cover mb-6 rounded-lg shadow-md"
       />

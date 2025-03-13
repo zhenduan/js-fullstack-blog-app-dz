@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import api from "../utils/api";
+import { jwtDecode } from "jwt-decode";
 
 const useAuthStore = create((set) => ({
-  user: null,
+  user: JSON.parse(localStorage.getItem("js-fullstack-blog-app-user")) || null,
   token: localStorage.getItem("js-fullstack-blog-app-token") || null,
   isAuthenticated: !!localStorage.getItem("js-fullstack-blog-app-token"),
 
@@ -27,12 +28,20 @@ const useAuthStore = create((set) => ({
           "js-fullstack-blog-app-token",
           response.data.token
         );
-        set({
-          user: response.data.user,
-          token: response.data.token,
-          isAuthenticated: true,
-        });
-        navigate("/");
+
+        const decodedUser = jwtDecode(response.data.token);
+        localStorage.setItem(
+          "js-fullstack-blog-app-user",
+          JSON.stringify(decodedUser)
+        );
+        if (decodedUser) {
+          set({
+            user: decodedUser,
+            token: response.data.token,
+            isAuthenticated: true,
+          });
+          navigate("/");
+        }
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -40,7 +49,8 @@ const useAuthStore = create((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("js-fullstack-blog-app-user");
+    localStorage.removeItem("js-fullstack-blog-app-token");
     set({ user: null, token: null, isAuthenticated: false });
   },
 
