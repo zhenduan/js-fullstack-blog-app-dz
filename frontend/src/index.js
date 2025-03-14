@@ -15,6 +15,7 @@ import EditBlogPage from "./pages/EditBlogPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "./stores/authStore";
@@ -53,6 +54,11 @@ root.render(
           <Route exact path="/login" element={<LoginPage />} />
           <Route exact path="/register" element={<RegisterPage />} />
           <Route exact path="/profile" element={<ProfilePage />} />
+          <Route
+            exact
+            path="/verify-email/:token"
+            element={<VerifyEmailPage />}
+          />
         </Routes>
       </Layout>
     </Router>

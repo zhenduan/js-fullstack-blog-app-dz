@@ -12,7 +12,6 @@ const useAuthStore = create((set) => ({
       const response = await api.post("/users/register", userData);
       console.log("register response", response);
       if (response.status === 201) {
-        navigate("/login");
       }
     } catch (error) {
       console.error("Registration failed:", error);
@@ -45,6 +44,16 @@ const useAuthStore = create((set) => ({
       }
     } catch (error) {
       console.error("Login failed:", error);
+    }
+  },
+  verifyEmail: async (token) => {
+    try {
+      const response = await api.get(`/users/verify-email/${token}`);
+      if (response.status === 200) {
+        return response;
+      }
+    } catch (error) {
+      console.error("Verify email failed:", error);
     }
   },
 

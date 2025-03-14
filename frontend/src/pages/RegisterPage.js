@@ -8,6 +8,7 @@ const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
   const navigate = useNavigate();
   const { isLoading, startLoading, stopLoading } = useLoadingStore();
 
@@ -22,6 +23,7 @@ const RegisterPage = () => {
       console.error("Registration failed:", error);
     } finally {
       stopLoading(); // Stop loading
+      setShowMessage(true);
     }
   };
 
@@ -29,6 +31,11 @@ const RegisterPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
+        {showMessage && (
+          <p className="text-center text-green-600">
+            Please visit your email to verify your account
+          </p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
