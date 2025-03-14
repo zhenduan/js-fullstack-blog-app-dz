@@ -18,7 +18,7 @@ const BlogCard = ({ blog }) => {
         />
         <div className="flex items-center justify-between">
           <span className="text-sm text-gray-600">
-            By {blog.author.username}
+            By {blog.author?.username}
           </span>
           <Link
             to={`/blogs/${blog._id}`}
