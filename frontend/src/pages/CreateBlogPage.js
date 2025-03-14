@@ -4,6 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import useBlogStore from "../stores/blogStore";
 import { useNavigate } from "react-router-dom";
 import useLoadingStore from "../stores/loadingStore";
+import { toast } from "react-toastify";
 
 const CreateBlogPage = () => {
   const [title, setTitle] = useState("");
@@ -16,6 +17,9 @@ const CreateBlogPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (title === "" || content === "") {
+      toast.error("Title and Content are required");
+    }
     startLoading();
     await createBlog({ title, content, featuredImage }, navigate);
     stopLoading();
