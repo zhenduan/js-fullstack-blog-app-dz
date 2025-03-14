@@ -14,7 +14,7 @@ import CreateBlogPage from "./pages/CreateBlogPage";
 import EditBlogPage from "./pages/EditBlogPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
+import NotFound from "./pages/NotFound";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ResendVerifyLinkPage from "./pages/ResendVerifyLinkPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
@@ -78,6 +78,7 @@ root.render(
             path="/reset-password/:token"
             element={<ResetPasswordPage />}
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
     </Router>
