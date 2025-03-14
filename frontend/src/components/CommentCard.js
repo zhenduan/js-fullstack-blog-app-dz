@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useAuthStore from "../stores/authStore";
 import useBlogStore from "../stores/blogStore";
+import { toast } from "react-toastify";
 
 const CommentCard = ({ comment, blogId }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -21,6 +22,14 @@ const CommentCard = ({ comment, blogId }) => {
   };
 
   const handleSaveEdit = async () => {
+    if (editComment === comment.content) {
+      setIsEditing(false);
+      return;
+    }
+    if (editComment === "") {
+      toast.error("Edit comment cannot be empty");
+      return;
+    }
     await updateComment(comment._id, { content: editComment });
     setIsEditing(false);
     fetchComments(blogId);

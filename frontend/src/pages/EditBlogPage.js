@@ -5,6 +5,7 @@ import useLoadingStore from "../stores/loadingStore";
 import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
+import { toast } from "react-toastify";
 import "react-quill/dist/quill.snow.css";
 
 const EditBlogPage = () => {
@@ -39,6 +40,10 @@ const EditBlogPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (title === "" || content === "<p><br></p>") {
+      toast.error("Title and Content are required");
+      return;
+    }
 
     try {
       setIsUpdatingBlog(true);
@@ -108,7 +113,11 @@ const EditBlogPage = () => {
           <p className="text-sm font-medium text-gray-700">
             Current featured image:
           </p>
-          <img className="w-20 h-20 mb-3" src={blog.featuredImageUrl} alt="" />
+          <img
+            className="w-20 h-20 mb-3"
+            src={blog.featuredImageUrl || "/blogPlaceholder.png"}
+            alt=""
+          />
           <label
             htmlFor="featuredImage"
             className="block text-sm font-medium text-gray-700"

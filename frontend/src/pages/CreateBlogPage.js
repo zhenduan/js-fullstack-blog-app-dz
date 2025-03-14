@@ -19,6 +19,7 @@ const CreateBlogPage = () => {
     e.preventDefault();
     if (title === "" || content === "") {
       toast.error("Title and Content are required");
+      return;
     }
     startLoading();
     await createBlog({ title, content, featuredImage }, navigate);
