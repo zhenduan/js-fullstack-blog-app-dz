@@ -24,12 +24,12 @@ const Header = () => {
           >
             Create Blog
           </Link>
-          <Link
+          {/* <Link
             to="/profile"
             className="hover:text-gray-300 transition duration-200"
           >
             Profile
-          </Link>
+          </Link> */}
         </div>
 
         <div className="relative">

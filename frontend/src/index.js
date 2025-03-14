@@ -56,7 +56,7 @@ root.render(
           />
           <Route exact path="/login" element={<LoginPage />} />
           <Route exact path="/register" element={<RegisterPage />} />
-          <Route exact path="/profile" element={<ProfilePage />} />
+          {/* <Route exact path="/profile" element={<ProfilePage />} /> */}
 
           <Route
             exact
