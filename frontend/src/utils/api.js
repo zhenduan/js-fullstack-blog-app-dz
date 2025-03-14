@@ -17,7 +17,10 @@ api.interceptors.request.use((config) => {
 
 // Response interceptor to handle errors globally
 api.interceptors.response.use(
-  (response) => response, // Success: return the response
+  (response) => {
+    toast.info(response.data?.message);
+    return response;
+  }, // Success: return the response
   (error) => {
     // Handle errors globally
     if (error.response) {

@@ -10,7 +10,6 @@ const useAuthStore = create((set) => ({
   register: async (userData, navigate) => {
     try {
       const response = await api.post("/users/register", userData);
-      console.log("register response", response);
       if (response.status === 201) {
       }
     } catch (error) {
@@ -56,11 +55,19 @@ const useAuthStore = create((set) => ({
       console.error("Verify email failed:", error);
     }
   },
+  resendVerifyEmail: async (payload) => {
+    try {
+      await api.post("/users/resend-verification-email", payload);
+    } catch (error) {
+      console.error("Resend verify email failed:", error);
+    }
+  },
 
   logout: () => {
     localStorage.removeItem("js-fullstack-blog-app-user");
     localStorage.removeItem("js-fullstack-blog-app-token");
     set({ user: null, token: null, isAuthenticated: false });
+    window.location.href = "/";
   },
 
   //   fetchUser: async () => {

@@ -104,6 +104,12 @@ const RegisterPage = () => {
               Login here
             </Link>
           </p>
+          <p className="text-sm text-gray-600 mt-2">
+            <Link className="underline" to="/resend-verify-link">
+              Click here
+            </Link>{" "}
+            to resend verification link if expired
+          </p>
         </div>
       </div>
     </div>

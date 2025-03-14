@@ -83,7 +83,7 @@ router.post(
       });
 
       const savedBlog = await newBlog.save();
-      res.status(201).json(savedBlog);
+      res.status(201).json({ message: "Blog created successfully", savedBlog });
     } catch (error) {
       console.error("Error creating blog post:", error);
       res.status(500).json({ error: "Failed to create blog post" });
@@ -149,7 +149,9 @@ router.put(
         blog.featuredImageUrl = req.file.path;
       }
       const updatedBlog = await blog.save();
-      res.status(200).json(updatedBlog);
+      res
+        .status(200)
+        .json({ message: "Blog updated successfully", updatedBlog });
     } catch (error) {
       console.error("Error updating blog:", error);
       res.status(500).json({ error: "Failed to update blog" });
@@ -170,7 +172,7 @@ router.post("/:id/comments", authMiddleware, async (req, res) => {
     });
 
     await comment.save();
-    res.status(201).json(comment);
+    res.status(201).json({ message: "Comment created successfully", comment });
   } catch (error) {
     console.error("Error creating comment:", error);
     res.status(500).json({ error: "Failed to create comment" });
@@ -230,7 +232,9 @@ router.put("/comments/:id", authMiddleware, async (req, res) => {
     }
     if (content) comment.content = content;
     const updatedComment = await comment.save();
-    res.status(200).json(updatedComment);
+    res
+      .status(200)
+      .json({ message: "Comment updated successfully", updatedComment });
   } catch (error) {
     console.error("Error updating comment:", error);
     res.status(500).json({ error: "Failed to update comment" });

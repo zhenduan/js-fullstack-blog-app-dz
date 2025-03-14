@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import api from "../utils/api";
-import { toast } from "react-toastify";
 
 const useBlogStore = create((set) => ({
   blogs: [],
@@ -55,7 +54,6 @@ const useBlogStore = create((set) => ({
         },
       });
       if (response.status === 201) {
-        toast.success("Blog created successfully");
         navigate("/");
         return response.data;
       }
@@ -69,7 +67,6 @@ const useBlogStore = create((set) => ({
         Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
       });
       if (response.status === 200) {
-        toast.info("Blog deleted successfully");
         navigate("/");
       }
     } catch (error) {
@@ -85,7 +82,6 @@ const useBlogStore = create((set) => ({
         },
       });
       if (response.status === 200) {
-        toast.success("Blog updated successfully!");
         navigate(`/blogs/${id}`);
       }
     } catch (error) {
@@ -102,38 +98,29 @@ const useBlogStore = create((set) => ({
   },
   addComment: async (id, content) => {
     try {
-      const response = await api.post(`/blogs/${id}/comments`, content, {
+      await api.post(`/blogs/${id}/comments`, content, {
         headers: {
           Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
         },
       });
-      if (response.status === 201) {
-        toast.success("Create comment successfully");
-      }
     } catch (error) {
       console.error("Failed to create comment", error);
     }
   },
   updateComment: async (id, content) => {
     try {
-      const response = await api.put(`/blogs/comments/${id}`, content, {
+      await api.put(`/blogs/comments/${id}`, content, {
         headers: {
           Authorization: localStorage.getItem("js-fullstack-blog-app-token"),
         },
       });
-      if (response.status === 200) {
-        toast.success("Edit comment successfully");
-      }
     } catch (error) {
       console.error("Failed to edit comment", error);
     }
   },
   deleteComment: async (commentId) => {
     try {
-      const response = await api.delete(`/blogs/comments/${commentId}`);
-      if (response.status === 200) {
-        toast.info("Comment deleted successfully");
-      }
+      await api.delete(`/blogs/comments/${commentId}`);
     } catch (error) {
       console.error("Failed to delete comment", error);
     }

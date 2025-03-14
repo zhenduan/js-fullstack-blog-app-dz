@@ -99,7 +99,6 @@ router.post("/resend-verification-email", async (req, res) => {
       length: 30,
       type: "alphanumeric",
     });
-    console.log("verificationToken", verificationToken);
     const verificationTokenExpires = Date.now() + 3600000; // 1 hour
 
     user.verificationToken = verificationToken;
@@ -107,7 +106,7 @@ router.post("/resend-verification-email", async (req, res) => {
     await user.save();
 
     // Send verification email
-    const verificationUrl = `${process.env.BACKEND_BASE_URL}/api/auth/verify-email/${verificationToken}`;
+    const verificationUrl = `${process.env.BACKEND_BASE_URL}/api/users/verify-email/${verificationToken}`;
     await transporter.sendMail({
       to: email,
       subject: "Verify Your Email",
@@ -147,7 +146,7 @@ router.post("/login", async (req, res) => {
       }
     );
 
-    res.status(200).json({ token });
+    res.status(200).json({ message: "Login successfully", token });
   } catch (error) {
     res.status(500).json({ error: "Login failed" });
   }
