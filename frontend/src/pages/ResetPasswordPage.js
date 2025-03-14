@@ -2,18 +2,23 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import useLoadingStore from "../stores/loadingStore";
 import useAuthStore from "../stores/authStore";
+import { useNavigate } from "react-router-dom";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
   const { token } = useParams();
   const { isLoading, startLoading, stopLoading } = useLoadingStore();
   const { resetPassword } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       startLoading();
-      await resetPassword(token, { password });
+      const result = await resetPassword(token, { password });
+      if (result.status === 200) {
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Failed to reset password");
     } finally {

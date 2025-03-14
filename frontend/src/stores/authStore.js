@@ -70,7 +70,11 @@ const useAuthStore = create((set) => ({
   },
   resetPassword: async (token, payload) => {
     try {
-      await api.post(`/users/reset-password/${token}`, payload);
+      const response = await api.post(
+        `/users/reset-password/${token}`,
+        payload
+      );
+      return response;
     } catch (error) {
       console.error("Reset password failed:", error);
     }
