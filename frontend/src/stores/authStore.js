@@ -62,6 +62,20 @@ const useAuthStore = create((set) => ({
       console.error("Resend verify email failed:", error);
     }
   },
+  forgotPassword: async (payload) => {
+    try {
+      await api.post("/users/forgot-password", payload);
+    } catch (error) {
+      console.error("Process forgot password failed:", error);
+    }
+  },
+  resetPassword: async (token, payload) => {
+    try {
+      await api.post(`/users/reset-password/${token}`, payload);
+    } catch (error) {
+      console.error("Reset password failed:", error);
+    }
+  },
 
   logout: () => {
     localStorage.removeItem("js-fullstack-blog-app-user");

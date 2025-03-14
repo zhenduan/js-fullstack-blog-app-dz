@@ -82,6 +82,15 @@ const LoginPage = () => {
               Register here
             </Link>
           </p>
+          <p className="text-sm text-gray-600">
+            Forgot your password?{" "}
+            <Link
+              to="/forgot-password"
+              className="text-blue-600 hover:text-blue-700 font-medium"
+            >
+              Reset password
+            </Link>
+          </p>
         </div>
       </div>
     </div>

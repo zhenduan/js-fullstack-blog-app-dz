@@ -17,6 +17,8 @@ import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ResendVerifyLinkPage from "./pages/ResendVerifyLinkPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "./stores/authStore";
@@ -65,6 +67,16 @@ root.render(
             exact
             path="/resend-verify-link"
             element={<ResendVerifyLinkPage />}
+          />
+          <Route
+            exact
+            path="/forgot-password"
+            element={<ForgotPasswordPage />}
+          />
+          <Route
+            exact
+            path="/reset-password/:token"
+            element={<ResetPasswordPage />}
           />
         </Routes>
       </Layout>
