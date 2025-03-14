@@ -21,7 +21,7 @@ router.post("/register", async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
+      return res.status(400).json({ error: "User already exists." });
     }
     // Create a verification token
     const verificationToken = cryptoRandomString({
