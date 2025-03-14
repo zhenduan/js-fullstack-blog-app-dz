@@ -10,8 +10,7 @@ const useAuthStore = create((set) => ({
   register: async (userData, navigate) => {
     try {
       const response = await api.post("/users/register", userData);
-      if (response.status === 201) {
-      }
+      return response;
     } catch (error) {
       console.error("Registration failed:", error);
     }

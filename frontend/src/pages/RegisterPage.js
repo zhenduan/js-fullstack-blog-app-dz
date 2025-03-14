@@ -12,18 +12,23 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const { isLoading, startLoading, stopLoading } = useLoadingStore();
 
-  const register = useAuthStore((state) => state.register);
+  const { register } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       startLoading(); // Start loading
-      await register({ username, email, password }, navigate);
+      const response = await register({ username, email, password }, navigate);
+      if (response.status === 201) {
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setShowMessage(true);
+      }
     } catch (error) {
       console.error("Registration failed:", error);
     } finally {
       stopLoading(); // Stop loading
-      setShowMessage(true);
     }
   };
 
@@ -47,6 +52,7 @@ const RegisterPage = () => {
             <input
               type="text"
               id="username"
+              value={username}
               placeholder="Username"
               onChange={(e) => setUsername(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -63,6 +69,7 @@ const RegisterPage = () => {
             <input
               type="email"
               id="email"
+              value={email}
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -79,6 +86,7 @@ const RegisterPage = () => {
             <input
               type="password"
               id="password"
+              value={password}
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
