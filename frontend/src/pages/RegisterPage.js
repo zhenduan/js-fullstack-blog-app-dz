@@ -37,6 +37,13 @@ const RegisterPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
+        <p className="text-sm text-gray-600 text-center">
+          Login with demo account if you don't want to create a real account
+        </p>
+        <p className="text-sm text-gray-600 text-center">
+          <span className="font-bold">email: </span>test@example.com{" "}
+          <span className="font-bold">password: </span>password123
+        </p>
         {showMessage && (
           <p className="text-center text-green-600">
             Please visit your email to verify your account
