@@ -46,7 +46,8 @@ const RegisterPage = () => {
         </p>
         {showMessage && (
           <p className="text-center text-green-600">
-            Please visit your email to verify your account
+            Please visit your email to verify your account. You will receive the
+            email from duan2439@gmail.com
           </p>
         )}
         <Form schema={registerSchema} onSubmit={handleSubmit} button="Register">

@@ -8,11 +8,15 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const { startLoading, stopLoading } = useLoadingStore();
   const { forgotPassword } = useAuthStore();
+  const [showMessage, setShowMessage] = useState(false);
 
   const handleSubmit = async () => {
     try {
       startLoading();
-      await forgotPassword({ email });
+      const response = await forgotPassword({ email });
+      if (response.status === 200) {
+        setShowMessage(true);
+      }
       setEmail("");
     } catch (error) {
       console.error("failed to resend verify link", error);
@@ -49,6 +53,12 @@ const ForgotPasswordPage = () => {
                 />
                 {errors.email && (
                   <p className="text-red-600 text-sm">{errors.email.message}</p>
+                )}
+                {showMessage && (
+                  <p className="text-center text-green-600">
+                    Please visit your email to verify your account. You will
+                    receive the email from duan2439@gmail.com
+                  </p>
                 )}
               </div>
             </>

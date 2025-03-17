@@ -63,7 +63,8 @@ const useAuthStore = create((set) => ({
   },
   forgotPassword: async (payload) => {
     try {
-      await api.post("/users/forgot-password", payload);
+      const response = await api.post("/users/forgot-password", payload);
+      return response;
     } catch (error) {
       console.error("Process forgot password failed:", error);
     }
